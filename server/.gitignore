@@ -1,0 +1,19 @@
+# Node modules
+node_modules/
+
+# Entorno
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Sistema
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
