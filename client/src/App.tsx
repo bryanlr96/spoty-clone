@@ -1,12 +1,17 @@
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import LoginPage from './pages/LoginPage';
+import MainPage from './pages/MainPage';
 
-function App() {
 
+const App = () => {
   return (
-    <>
-      <h1 className=' text-4xl font-bold uppercase'> Hola mundo</h1>
-    </>
-  )
-}
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<MainPage/>} />
+      </Routes>
+    </Router>
+  );
+};
 
-export default App
+export default App;
