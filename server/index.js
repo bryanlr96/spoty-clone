@@ -2,11 +2,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import routes from './routes/routes.js';
-
-dotenv.config();
+import { PORT } from './config/index.js';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // Middlewares para parsear JSON y cookies
 app.use(express.json());

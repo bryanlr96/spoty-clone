@@ -2,10 +2,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const config = {
-  spotifyClientId: process.env.SPOTIFY_CLIENT_ID,
-  spotifyClientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-  spotifyRedirectUri: process.env.SPOTIFY_REDIRECT_URI,
-  frontendUrl: process.env.FRONTEND_URL,
-  port: process.env.PORT || 5000,
-};
+export const SPOTIFYCLIENTID = process.env.SPOTIFY_CLIENT_ID;
+export const SPOTIFYCLIENTSECRET = process.env.SPOTIFY_CLIENT_SECRET
+export const SPOTIFYREDIRECTURI = process.env.SPOTIFY_REDIRECT_URI
+export const FRONTENDURL = process.env.FRONTEND_URL
+export const PORT = process.env.PORT || 5000
