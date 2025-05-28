@@ -1,27 +1,9 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSession } from '../hooks/useSession';
+
 
 export default function LoginPage() {
-    const { authenticated, loading } = useSession();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!loading && authenticated) {
-            navigate('/');
-        }
-    }, [authenticated, loading, navigate]);
-
+   
     const handleLogin = () => {
         window.location.href = '/api/login'; // Ruta del backend para login con Spotify
-    }
-
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <p>Cargando...</p>
-            </div>
-        );
     }
 
     return (

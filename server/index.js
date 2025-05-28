@@ -9,14 +9,16 @@ const app = express();
 // Middlewares para parsear JSON y cookies
 app.use(express.json());
 app.use(cookieParser());
+
+
 app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true // importante para que se envíen las cookies
+  origin: 'http://127.0.0.1:5713',
+  credentials: true
 }));
 
 // Añadimos las rutas desde el fichero routes.js
 app.use(routes)
 
-app.listen(PORT, () => {
-  console.log(`Servidor arrancado en http://localhost:${PORT}`);
+app.listen(PORT, '127.0.0.1', () => {
+  console.log(`Servidor arrancado en http://127.0.0.1:${PORT}`);
 });
