@@ -7,5 +7,7 @@ router.get('/login', AuthController.login);
 
 router.get('/callback', AuthController.callback);
 
+router.get('/auth', AuthController.checkSession)
+
 
 export default router;
