@@ -1,11 +1,10 @@
-// src/components/AuthGuard.tsx
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
+import { useAuthContext } from '../hooks/useAuthContext'
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { loading, authenticated } = useAuth()
+  const { loading, authData } = useAuthContext()
 
   if (loading) return <div>Cargando...</div>
 
-  return authenticated ? <>{children}</> : <Navigate to="/login" replace />
+  return authData?.authenticated? <>{children}</> : <Navigate to="/login" replace />
 }

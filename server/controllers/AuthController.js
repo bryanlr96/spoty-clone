@@ -1,11 +1,19 @@
 import querystring from 'querystring';
 import { SPOTIFYCLIENTID, SPOTIFYCLIENTSECRET, SPOTIFYREDIRECTURI } from '../config/index.js';
 import axios from 'axios';
+import SpotifyService from '../services/SpotifyService.js';
 
 class AuthController {
 
   static login(req, res) {
-    const scope = 'user-read-private user-read-email';
+    const scope = [
+      'user-read-private',
+      'user-read-email',
+      'user-read-recently-played',
+      'user-library-read',
+      'playlist-read-private',
+      'playlist-read-collaborative',
+    ].join(' ');
 
     const queryParams = querystring.stringify({
       response_type: 'code',
@@ -66,10 +74,38 @@ class AuthController {
 
   static async checkSession(req, res) {
     const token = req.cookies.access_token
+
     if (!token) {
       return res.status(200).json({ authenticated: false })
     }
-    return res.status(200).json({ authenticated: true });
+
+    try {
+      const [user, playlists, likedSongs, recentlyPlayed] = await Promise.all([
+        SpotifyService.getUserInfo(token),
+        SpotifyService.getUserPlaylists(token),
+        SpotifyService.getLikedSongs(token),
+        SpotifyService.getRecentlyPlayed(token)
+      ])
+
+      return res.status(200).json({
+        authenticated: true,
+        access_token: token,
+        expires_at: null, // Si quieres añadir el vencimiento, tendrás que guardarlo tú cuando lo recibes
+        user: {
+          id: user.id,
+          name: user.display_name,
+          email: user.email,
+          image: user.images[0]?.url || null
+        },
+        playlists,
+        likedSongs,
+        recentlyPlayed
+      })
+    } catch (error) {
+      console.error('Error al verificar sesión:', error.response?.data || error.message)
+      return res.status(500).json({ authenticated: false, error: 'Error al obtener los datos del usuario' })
+    }
+
   }
 }
 

@@ -1,10 +1,10 @@
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
+import { useAuthContext } from '../hooks/useAuthContext'
 
 export default function GuestGuard({ children }: { children: React.ReactNode }) {
-  const { loading, authenticated } = useAuth()
+  const { loading, authData} = useAuthContext()
 
   if (loading) return <div>Cargando...</div>
 
-  return authenticated ? <Navigate to="/" replace /> : <>{children}</>
+  return authData?.authenticated ? <Navigate to="/" replace /> : <>{children}</>
 }
