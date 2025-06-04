@@ -13,15 +13,17 @@ type Playlist = {
     tracks: { total: number }
 }
 
-type Track = {
+export type Track = {
     id: string
-    name: string
-    artists: { name: string }[]
+    title: string
+    artist: string
     album: {
         name: string
         images: { url: string }[]
     }
     duration_ms: number
+    image: string
+    previewUrl: string
 }
 
 export type AuthData = {

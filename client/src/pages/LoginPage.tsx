@@ -1,4 +1,4 @@
-import FooterPrelogin from "../components/FooterPrelogin";
+import Footer from "../components/Footer";
 import HeaderPrelogin from "../components/HeaderPrelogin";
 import { useState, useEffect } from "react";
 
@@ -57,7 +57,7 @@ export default function LoginPage() {
                 </div>
             </main>
 
-            <FooterPrelogin />
+            <Footer />
         </div>
     );
 }

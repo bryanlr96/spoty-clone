@@ -1,16 +1,17 @@
+import Footer from "../components/Footer";
+import HeaderPostLogin from "../components/HeaderPostLogin";
+import Media from "../components/Media";
 
 
 export default function MainPage() {
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen">
-            <h1 className="text-2xl font-bold mb-4">¡Sesión iniciada!</h1>
-            <p>Has accedido correctamente con Spotify.</p>
-            <button
-                className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-            >
-                Cerrar sesión
-            </button>
+        <div className="flex flex-col min-h-screen bg-black">
+            <HeaderPostLogin/>
+            <main className="relative flex flex-1 w-[80%] mx-auto overflow-hidden">
+                <Media/>
+            </main>
+            <Footer/>
         </div>
     );
 }

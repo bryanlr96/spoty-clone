@@ -13,6 +13,7 @@ class AuthController {
       'user-library-read',
       'playlist-read-private',
       'playlist-read-collaborative',
+      'user-read-playback-state',
     ].join(' ');
 
     const queryParams = querystring.stringify({
@@ -84,7 +85,7 @@ class AuthController {
         SpotifyService.getUserInfo(token),
         SpotifyService.getUserPlaylists(token),
         SpotifyService.getLikedSongs(token),
-        SpotifyService.getRecentlyPlayed(token)
+        SpotifyService.getRecentlyPlayed(token),
       ])
 
       return res.status(200).json({
@@ -99,7 +100,7 @@ class AuthController {
         },
         playlists,
         likedSongs,
-        recentlyPlayed
+        recentlyPlayed,
       })
     } catch (error) {
       console.error('Error al verificar sesión:', error.response?.data || error.message)

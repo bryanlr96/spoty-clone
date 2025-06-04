@@ -1,9 +1,11 @@
 import { createContext, useState, useEffect, type ReactNode } from 'react'
-import { type AuthData } from '../types/SpotifyTypes'
+import { type AuthData, type Track } from '../types/SpotifyTypes'
 
-interface AuthContextType {
+type AuthContextType = {
   authData: AuthData | null
   setAuthData: (data: AuthData | null) => void
+  currentSong: Track | null
+  setCurrentSong: (song: Track | null) => void
   loading: boolean
 }
 
@@ -11,6 +13,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [authData, setAuthData] = useState<AuthData | null>(null)
+  const [currentSong, setCurrentSong] = useState<Track | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -28,8 +31,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       .finally(() => setLoading(false))
   }, [])
 
+  useEffect(() => {
+    if (authData?.recentlyPlayed?.length) {
+      setCurrentSong(authData.recentlyPlayed[0])
+    }
+  }, [authData])
+
   return (
-    <AuthContext.Provider value={{ authData, setAuthData, loading }}>
+    <AuthContext.Provider value={{ authData, setAuthData,currentSong, setCurrentSong, loading }}>
       {children}
     </AuthContext.Provider>
   )
