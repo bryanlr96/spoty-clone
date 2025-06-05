@@ -4,8 +4,8 @@ import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } 
 import { CSS } from "@dnd-kit/utilities"
 import type { Track } from "../types/SpotifyTypes"
 import { useAuthContext } from "../hooks/useAuthContext"
-
-
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import { HiChevronDown, HiChevronUp } from "react-icons/hi"
 
 
 
@@ -36,12 +36,12 @@ export default function SortableSongList() {
     }
 
     return (
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
             <SortableContext items={items} strategy={verticalListSortingStrategy}>
                 <div className="flex flex-col gap-2">
                     {items.map(id => {
                         const song = currentPlaylist.find(s => s.id === id)!
-                        return <SortableCard key={song.id} song={song} onClick={() => console.log('hola')} />
+                        return <SortableCard key={song.id} song={song} />
                     })}
                 </div>
             </SortableContext>
@@ -49,27 +49,42 @@ export default function SortableSongList() {
     )
 }
 
-function SortableCard({ song, onClick }: { song: Track; onClick: (s: Track) => void }) {
+function SortableCard({ song }: { song: Track }) {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: song.id })
+    const { currentSong, setCurrentSong } = useAuthContext()
 
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
     }
 
-    const { currentSong } = useAuthContext()
+    const isActive = song.id === currentSong?.id
 
     return (
         <div
             ref={setNodeRef}
-            {...attributes}
-            {...listeners}
             style={style}
-            onClick={() => onClick(song)}
-            className={song.id === currentSong?.id ? "flex items-center gap-4 p-2 bg-amber-600 rounded-lg cursor-pointer hover:bg-amber-500 transition" : "flex items-center gap-4 p-2 bg-zinc-800 rounded-lg cursor-pointer hover:bg-zinc-700 transition"}
+            className={`flex items-center gap-4 p-2 rounded-lg cursor-pointer transition
+        ${isActive ? "bg-amber-600 hover:bg-amber-500" : "bg-zinc-800 hover:bg-zinc-700"}`}
+            onClick={() => setCurrentSong(song)}
+            {...attributes}
         >
             <img src={song.image} alt={song.title} className="w-12 h-12 rounded object-cover" />
-            <span className="text-white font-medium truncate">{song.title}</span>
+            <span className="text-white font-medium truncate flex-1">{song.title}</span>
+
+
+            <button
+                type="button"
+                {...listeners}
+                className="p-2 cursor-grab font-bold text-xl"
+                onClick={(e) => e.stopPropagation()}
+                aria-label="Drag handle"
+            >
+                <div className="flex flex-col items-center font-bold">
+                    <HiChevronUp size={20} />
+                    <HiChevronDown size={20} />
+                </div>
+            </button>
         </div>
     )
 }

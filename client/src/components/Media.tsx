@@ -11,7 +11,7 @@ export default function Media() {
 
   return (
     <section className="w-full flex flex-col sm:flex-row gap-10 mt-10">
-      <div className="relative w-[70%] h-[500px] overflow-hidden rounded-2xl">
+      <div className="relative w-[70%] h-[600px] overflow-hidden rounded-2xl">
         <div className="relative z-10 flex flex-col items-center justify-center w-full h-full text-white text-4xl font-bold gap-5 bg-white/10">
           <img src={currentSong?.image} alt="portada de la cancion" className="w-1/4 rounded-2xl" />
           <h2>{currentSong?.title}</h2>
@@ -31,7 +31,7 @@ export default function Media() {
           />
         </div>
       </div>
-      <div className="flex-1 h-[500px] rounded-lg flex flex-col text-white overflow-y-auto scrollbar-hide relative">
+      <div className="flex-1 h-[600px] rounded-lg flex flex-col text-white overflow-y-auto scrollbar-hide relative">
         <h2 className="text-3xl font-bold mb-5 sticky top-0 bg-black z-10 py-4">Next Songs</h2>
         {currentPlaylist.length > 0 ? <SortableSongList/> : <><span>No songs in the queue</span>Add some or use a playlist<span></span></>}
       </div>

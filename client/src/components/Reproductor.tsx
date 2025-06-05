@@ -1,6 +1,7 @@
 import { useState, useEffect, type MutableRefObject } from "react"
 import { FaPlay, FaPause, FaBackward, FaForward, FaRandom, FaRedo } from "react-icons/fa"
-
+import { useSongNavigation } from "../hooks/useSongsNavigation"
+import { useAuthContext } from "../hooks/useAuthContext"
 
 export interface ReproductorProps {
   audioRef: MutableRefObject<HTMLAudioElement | null>
@@ -12,6 +13,8 @@ export interface ReproductorProps {
 
 export default function Reproductor({ audioRef, isPlaying, setIsPlaying, loop, setLoop }: ReproductorProps) {
   const [progress, setProgress] = useState(0)
+  const { playPrevious, playNext } = useSongNavigation()
+  const { currentSong } = useAuthContext()
 
   // Actualiza el progreso mientras el audio se reproduce
   useEffect(() => {
@@ -37,7 +40,7 @@ export default function Reproductor({ audioRef, isPlaying, setIsPlaying, loop, s
     const handleEnded = () => {
       if (!loop) {
         audio.currentTime = 0
-        setIsPlaying(false)
+        playNext()
       } else {
         audio.play() // loop manual, ya que audio.loop = false
       }
@@ -47,7 +50,21 @@ export default function Reproductor({ audioRef, isPlaying, setIsPlaying, loop, s
     return () => {
       audio.removeEventListener("ended", handleEnded)
     }
-  }, [audioRef, loop, setIsPlaying])
+  }, [audioRef, loop, playNext])
+
+  useEffect(() => {
+    if (!audioRef.current || !currentSong) return
+    
+    if (isPlaying) {
+      audioRef.current.load()
+      audioRef.current.play().catch((e) => {
+        console.warn("Playback prevented", e)
+      })
+      setIsPlaying(true)
+    }
+
+
+  }, [currentSong, isPlaying])
 
 
   const togglePlayback = () => {
@@ -75,7 +92,7 @@ export default function Reproductor({ audioRef, isPlaying, setIsPlaying, loop, s
   return (
     <>
       <div className="w-[80%] flex items-center justify-center text-white gap-7">
-        <button className="cursor-pointer hover:text-amber-600 transition">
+        <button className="cursor-pointer hover:text-amber-600 transition" onClick={playPrevious}>
           <FaBackward />
         </button>
 
@@ -86,7 +103,7 @@ export default function Reproductor({ audioRef, isPlaying, setIsPlaying, loop, s
           {isPlaying ? <FaPause /> : <FaPlay />}
         </button>
 
-        <button className="cursor-pointer hover:text-amber-600 transition">
+        <button className="cursor-pointer hover:text-amber-600 transition" onClick={playNext}>
           <FaForward />
         </button>
       </div>
@@ -103,9 +120,9 @@ export default function Reproductor({ audioRef, isPlaying, setIsPlaying, loop, s
           value={progress}
           onChange={handleSeek}
           className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-[#38E07A]"
-          // style={{
-          //   background: `linear-gradient(to right, white 0%, white ${progress}%, rgba(217,119,6,0.4) ${progress}%, rgba(217,119,6,0.4) 100%)`
-          // }}
+        // style={{
+        //   background: `linear-gradient(to right, white 0%, white ${progress}%, rgba(217,119,6,0.4) ${progress}%, rgba(217,119,6,0.4) 100%)`
+        // }}
         />
 
         <button className="cursor-pointer" onClick={() => setLoop(!loop)}>

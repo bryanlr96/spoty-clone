@@ -22,7 +22,7 @@ export default function HeaderPostLogin() {
                 </form>
 
                 <button
-                    className="text-white flex items-center font-bold"
+                    className="text-white flex items-center font-bold cursor-pointer  hover:text-amber-600"
                 //   onClick={}
                 >
                     {authData?.user.image && (
