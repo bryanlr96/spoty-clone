@@ -3,6 +3,7 @@ import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import AuthGuard from './components/AuthGuard';
 import GuestGuard from './components/GuestGuard';
+import './App.css'
 
 
 const App = () => {

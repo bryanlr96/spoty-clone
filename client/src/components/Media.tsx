@@ -31,8 +31,8 @@ export default function Media() {
           />
         </div>
       </div>
-      <div className="flex-1 h-[500px] rounded-3xl flex flex-col text-white">
-        <h2 className="text-3xl font-bold">Next Songs</h2>
+      <div className="flex-1 h-[500px] rounded-lg flex flex-col text-white overflow-y-auto scrollbar-hide relative">
+        <h2 className="text-3xl font-bold mb-5 sticky top-0 bg-black z-10 py-4">Next Songs</h2>
         {currentPlaylist.length > 0 ? <SortableSongList/> : <><span>No songs in the queue</span>Add some or use a playlist<span></span></>}
       </div>
     </section>

@@ -103,9 +103,9 @@ export default function Reproductor({ audioRef, isPlaying, setIsPlaying, loop, s
           value={progress}
           onChange={handleSeek}
           className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-[#38E07A]"
-          style={{
-            background: `linear-gradient(to right, white 0%, white ${progress}%, rgba(217,119,6,0.4) ${progress}%, rgba(217,119,6,0.4) 100%)`
-          }}
+          // style={{
+          //   background: `linear-gradient(to right, white 0%, white ${progress}%, rgba(217,119,6,0.4) ${progress}%, rgba(217,119,6,0.4) 100%)`
+          // }}
         />
 
         <button className="cursor-pointer" onClick={() => setLoop(!loop)}>
