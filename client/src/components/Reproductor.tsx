@@ -6,9 +6,11 @@ export interface ReproductorProps {
   audioRef: MutableRefObject<HTMLAudioElement | null>
   isPlaying: boolean
   setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>
+  loop: boolean
+  setLoop: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function Reproductor({ audioRef, isPlaying, setIsPlaying }:ReproductorProps) {
+export default function Reproductor({ audioRef, isPlaying, setIsPlaying, loop, setLoop }: ReproductorProps) {
   const [progress, setProgress] = useState(0)
 
   // Actualiza el progreso mientras el audio se reproduce
@@ -26,6 +28,27 @@ export default function Reproductor({ audioRef, isPlaying, setIsPlaying }:Reprod
       audio.removeEventListener("timeupdate", updateProgress)
     }
   }, [audioRef])
+
+  // Manejar el final de la canción
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    const handleEnded = () => {
+      if (!loop) {
+        audio.currentTime = 0
+        setIsPlaying(false)
+      } else {
+        audio.play() // loop manual, ya que audio.loop = false
+      }
+    }
+
+    audio.addEventListener("ended", handleEnded)
+    return () => {
+      audio.removeEventListener("ended", handleEnded)
+    }
+  }, [audioRef, loop, setIsPlaying])
+
 
   const togglePlayback = () => {
     const audio = audioRef.current
@@ -52,7 +75,7 @@ export default function Reproductor({ audioRef, isPlaying, setIsPlaying }:Reprod
   return (
     <>
       <div className="w-[80%] flex items-center justify-center text-white gap-7">
-        <button className="cursor-pointer">
+        <button className="cursor-pointer hover:text-amber-600 transition">
           <FaBackward />
         </button>
 
@@ -63,13 +86,13 @@ export default function Reproductor({ audioRef, isPlaying, setIsPlaying }:Reprod
           {isPlaying ? <FaPause /> : <FaPlay />}
         </button>
 
-        <button className="cursor-pointer">
+        <button className="cursor-pointer hover:text-amber-600 transition">
           <FaForward />
         </button>
       </div>
 
       <div className="w-[80%] flex items-center justify-center gap-5 text-xl">
-        <button className="cursor-pointer">
+        <button className="cursor-pointer hover:text-amber-600 transition">
           <FaRandom />
         </button>
 
@@ -80,10 +103,13 @@ export default function Reproductor({ audioRef, isPlaying, setIsPlaying }:Reprod
           value={progress}
           onChange={handleSeek}
           className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-[#38E07A]"
+          style={{
+            background: `linear-gradient(to right, white 0%, white ${progress}%, rgba(217,119,6,0.4) ${progress}%, rgba(217,119,6,0.4) 100%)`
+          }}
         />
 
-        <button className="cursor-pointer">
-          <FaRedo />
+        <button className="cursor-pointer" onClick={() => setLoop(!loop)}>
+          <FaRedo className={loop ? "text-amber-600" : "text-white hover:text-amber-600 transition"} />
         </button>
       </div>
     </>

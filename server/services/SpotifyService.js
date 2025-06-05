@@ -16,7 +16,6 @@ async function fetchItunesPreviewUrl(title, artist) {
   const query = encodeURIComponent(`${title} ${artist}`)
   const response = await fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=1`)
   const data = await response.json()
-
   if (data.resultCount > 0 && data.results[0].previewUrl) {
     return data.results[0].previewUrl
   }
@@ -54,6 +53,7 @@ export default {
     const data = await fetchFromSpotify('/me/player/recently-played?limit=10', token);
     return Promise.all(
       data.items.map(async (item) => {
+        console.log(item)
         const spotifyPreview = item.track.preview_url;
         if (spotifyPreview) {
           return {
